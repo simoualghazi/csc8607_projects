@@ -10,8 +10,8 @@
 
 ## 0) Informations générales
 
-- **Étudiant·e** : _Nom, Prénom_
-- **Projet** : _Intitulé (dataset × modèle)_
+- **Étudiant·e** : _OUALGHAZI, Mohamed_
+- **Projet** : _Speech Commands v0.02 (reconnaissance de mots courts) avec CNN sur spectrogrammes log-mel_
 - **Dépôt Git** : _URL publique_
 - **Environnement** : `python == ...`, `torch == ...`, `cuda == ...`  
 - **Commandes utilisées** :
