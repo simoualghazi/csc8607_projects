@@ -1,27 +1,27 @@
 # Fichier de configuration générique (à adapter au projet)
 dataset:
-  name: TODO                # ex: "CIFAR10", "IMDB", ...
-  root: "./data"            # chemin local pour les données
-  split:                    # optionnel : noms/tailles de splits
-    train: TODO
-    val: TODO
-    test: TODO
-  download: true            # si supporté
+  name: SPEECHCOMMANDS
+  root: "./data"
+  download: true
   num_workers: 4
   shuffle: true
 
+train:
+  batch_size: 64
+
 preprocess:
-  # transformations de base (ex: resize, normalize)
-  resize:                   # ex: [32, 32] ou null
-  normalize:                # ex: {"mean": [0.5,0.5,0.5], "std":[0.5,0.5,0.5]} ou null
-  text_tokenizer:           # pour NLP : nom ou paramètres, sinon null
+  target_sample_rate: 16000
+  target_num_samples: 16000
+  n_mels: 64
+  n_fft: 400          # à régler parmi {400, 512, 640}
+  spec_normalize: standard
 
 augment:
-  # data augmentation (laisser null si non utilisée)
-  random_flip:              # true/false
-  random_crop:              # paramètres ou null
-  color_jitter:             # paramètres ou null
-  spec_augment:             # pour audio : paramètres ou null
+  spec_augment:
+    freq_mask_param: 8
+    time_mask_param: 20
+    num_freq_masks: 1
+    num_time_masks: 1
 
 model:
   type: TODO                # ex: "resnet18", "mlp", "lstm", ...
