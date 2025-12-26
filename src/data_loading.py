@@ -90,43 +90,51 @@ class SpeechCommandsWrapper(Dataset):
         return x, y
 
 
-def _pad_or_truncate(x: torch.Tensor, target_len: int) -> torch.Tensor:
+def _pad_or_truncate(x: torch.Tensor, target_T: int) -> torch.Tensor:
     """
-    Pad/truncate sur la dimension temps.
-    x attendu en [C, T].
+    Pad/truncate sur la dimension temps T pour un log-mel spectrogramme.
+    Attendu: [1, F, T] (ou parfois [1,1,F,T] -> on squeeze).
+    Retour: [1, F, target_T]
     """
-    if x.dim() != 2:
-        raise ValueError(f"Attendu [C, T], reçu {tuple(x.shape)}")
-    c, t = x.shape
-    if t > target_len:
-        return x[:, :target_len]
-    if t < target_len:
-        return torch.nn.functional.pad(x, (0, target_len - t))
+    # Corrige le cas accidentel: (1,1,F,T)
+    if x.dim() == 4 and x.shape[0] == 1:
+        x = x.squeeze(0)
+
+    if x.dim() != 3:
+        raise ValueError(f"Attendu [1, F, T], reçu {tuple(x.shape)}")
+
+    c, f, t = x.shape
+    if t > target_T:
+        return x[..., :target_T]
+    if t < target_T:
+        return torch.nn.functional.pad(x, (0, target_T - t))
     return x
 
 
-def make_collate_fn(target_num_samples: Optional[int] = None):
+def make_collate_fn(target_T: int | None = None):
     """
-    Collate function pour batch audio à longueur variable.
-    - si target_num_samples est fourni : pad/truncate à cette taille
-    - sinon : pad à la taille max dans le batch
+    Collate pour log-mel spectrogrammes:
+    - si target_T est fourni: pad/truncate à target_T
+    - sinon: pad au max_T du batch
+    Retourne:
+      X: [B, 1, F, T]
+      y: [B]
     """
     def collate(batch):
         xs, ys = zip(*batch)
 
-        # Assure que chaque x est [C, T]
-        xs = [x if x.dim() == 2 else x.unsqueeze(0) for x in xs]
+        # normaliser shape des xs: enlever un batch inutile si présent
+        xs = [x.squeeze(0) if (x.dim() == 4 and x.shape[0] == 1) else x for x in xs]
 
-        if target_num_samples is None:
-            max_len = max(x.shape[1] for x in xs)
-        else:
-            max_len = int(target_num_samples)
+        # déterminer T
+        max_T = max(x.shape[-1] for x in xs) if target_T is None else int(target_T)
 
-        xs = torch.stack([_pad_or_truncate(x, max_len) for x in xs], dim=0)  # [B, C, T]
-        ys = torch.stack(list(ys), dim=0)  # [B]
+        xs = torch.stack([_pad_or_truncate(x, max_T) for x in xs], dim=0)  # [B,1,F,T]
+        ys = torch.stack(list(ys), dim=0)
         return xs, ys
 
     return collate
+
 
 
 def get_dataloaders(config: dict):
@@ -194,7 +202,7 @@ def get_dataloaders(config: dict):
         labels=labels,
     )
 
-    collate_fn = make_collate_fn(target_num_samples=target_num_samples)
+    collate_fn = make_collate_fn(target_T=None)
 
     # -------- dataloaders --------
     train_loader = DataLoader(
@@ -239,4 +247,3 @@ def get_dataloaders(config: dict):
     }
 
     return train_loader, val_loader, test_loader, meta
-
