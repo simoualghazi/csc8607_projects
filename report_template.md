@@ -13,7 +13,7 @@
 - **Étudiant·e** : _OUALGHAZI, Mohamed_
 - **Projet** : _Speech Commands v0.02 (reconnaissance de mots courts) avec CNN sur spectrogrammes log-mel_
 - **Dépôt Git** : _URL publique_
-- **Environnement** : `python == ...`, `torch == ...`, `cuda == ...`  
+- **Environnement** : `python == 3.10.18`, `torch == 2.5.1`, `cuda == 12.1`  
 - **Commandes utilisées** :
   - Entraînement : `python -m src.train --config configs/config.yaml`
   - LR finder : `python -m src.lr_finder --config configs/config.yaml`
@@ -25,11 +25,11 @@
 ## 1) Données
 
 ### 1.1 Description du dataset
-- **Source** (lien) :
-- **Type d’entrée** (image / texte / audio / séries) :
-- **Tâche** (multiclasses, multi-label, régression) :
-- **Dimensions d’entrée attendues** (`meta["input_shape"]`) :
-- **Nombre de classes** (`meta["num_classes"]`) :
+- **Source**: [torchaudio.datasets.SPEECHCOMMANDS](https://docs.pytorch.org/audio/stable/datasets.html#speechcommands)
+- **Type d’entrée** : Audio  
+- **Tâche** : multiclasses
+- **Dimensions d’entrée attendues** (`meta["input_shape"]`) :  [1, 64, 81]
+- **Nombre de classes** (`meta["num_classes"]`) :35 classes
 
 **D1.** Quel dataset utilisez-vous ? D’où provient-il et quel est son format (dimensions, type d’entrée) ?
 
@@ -37,14 +37,16 @@
 
 | Split | #Exemples | Particularités (déséquilibre, longueur moyenne, etc.) |
 |------:|----------:|--------------------------------------------------------|
-| Train |           |                                                        |
-| Val   |           |                                                        |
-| Test  |           |                                                        |
+| Train |   84843        |                                                        |
+| Val   | 9981          |                                                        |
+| Test  |  11005         |                                                        |
 
 **D2.** Donnez la taille de chaque split et le nombre de classes.  
 **D3.** Si vous avez créé un split (ex. validation), expliquez **comment** (stratification, ratio, seed).
 
 **D4.** Donnez la **distribution des classes** (graphique ou tableau) et commentez en 2–3 lignes l’impact potentiel sur l’entraînement.  
+![alt text](captures/image.png)
+
 **D5.** Mentionnez toute particularité détectée (tailles variées, longueurs variables, multi-labels, etc.).
 
 ### 1.3 Prétraitements (preprocessing) — _appliqués à train/val/test_
@@ -70,7 +72,7 @@ Listez précisément les opérations et paramètres (valeurs **fixes**) :
 **D9.** Les augmentations **conservent-elles les labels** ? Justifiez pour chaque transformation retenue.
 
 ### 1.5 Sanity-checks
-
+![alt text](captures/image-1.png)
 - **Exemples** après preprocessing/augmentation (insérer 2–3 images/spectrogrammes) :
 
 > _Insérer ici 2–3 captures illustrant les données après transformation._
