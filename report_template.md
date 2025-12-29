@@ -85,11 +85,11 @@ Listez précisément les opérations et paramètres (valeurs **fixes**) :
 ## 2) Modèle
 
 ### 2.1 Baselines
-
+![alt text](image.png)
 **M0.**
-- **Classe majoritaire** — Métrique : `_____` → score = `_____`
-- **Prédiction aléatoire uniforme** — Métrique : `_____` → score = `_____`  
-_Commentez en 2 lignes ce que ces chiffres impliquent._
+- **Classe majoritaire** — Métrique : `Accuracy` → score = `3.80%`
+- **Prédiction aléatoire uniforme** — Métrique : `Accuracy` → score = `2.73%`  
+- **Prédiction aléatoire pondérée** — Métrique : `Accuracy` → score = `3.04%` 
 
 ### 2.2 Architecture implémentée
 

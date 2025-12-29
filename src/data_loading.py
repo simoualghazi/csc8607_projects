@@ -229,20 +229,18 @@ def get_dataloaders(config: dict):
         pin_memory=True,
         collate_fn=collate_fn,
     )
-
     # -------- meta --------
     num_classes = len(labels)
 
-    # input_shape demandé : tuple
-    # Audio mono => C=1, T variable => -1, ou fixe si target_num_samples est défini.
-    if target_num_samples is None:
-        input_shape = (1, -1)
-    else:
-        input_shape = (1, int(target_num_samples))
+    # input_shape exact (après preprocess): (1, F, T)
+    x0, _ = train_ds[0]
+    # robustesse si un squeeze est nécessaire
+    if x0.dim() == 4 and x0.shape[0] == 1:
+        x0 = x0.squeeze(0)
 
     meta: Dict = {
         "num_classes": num_classes,
-        "input_shape": input_shape,
+        "input_shape": tuple(x0.shape),  # (1, F, T)
         "labels": labels,
     }
 
