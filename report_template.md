@@ -77,9 +77,11 @@ Listez précisément les opérations et paramètres (valeurs **fixes**) :
 
 > _Insérer ici 2–3 captures illustrant les données après transformation._
 
-**D10.** Montrez 2–3 exemples et commentez brièvement.  
-**D11.** Donnez la **forme exacte** d’un batch train (ex. `(batch, C, H, W)` ou `(batch, seq_len)`), et vérifiez la cohérence avec `meta["input_shape"]`.
+**D10.** Montrez 2–3 exemples et commentez brièvement. 
+Les spectrogrammes log-mel (1×64×81) montrent l’énergie répartie sur les bandes fréquentielles au cours du temps. Après augmentation (SpecAugment), certaines zones temporelles/fréquentielles peuvent être masquées, ce qui force le modèle à apprendre des motifs plus robustes et améliore la généralisation.  
 
+**D11.** Donnez la **forme exacte** d’un batch train (ex. `(batch, C, H, W)` ou `(batch, seq_len)`), et vérifiez la cohérence avec `meta["input_shape"]`.
+La forme d’un batch train est (batch, C, F, T) = (64, 1, 64, 81). La cohérence est vérifiée car meta["input_shape"] = (1, 64, 81) correspond exactement à x_batch.shape[1:].
 ---
 
 ## 2) Modèle
@@ -94,18 +96,18 @@ Listez précisément les opérations et paramètres (valeurs **fixes**) :
 ### 2.2 Architecture implémentée
 
 - **Description couche par couche** (ordre exact, tailles, activations, normalisations, poolings, résiduels, etc.) :
-  - Input → …
-  - Stage 1 (répéter N₁ fois) : …
-  - Stage 2 (répéter N₂ fois) : …
-  - Stage 3 (répéter N₃ fois) : …
-  - Tête (GAP / linéaire) → logits (dimension = nb classes)
+  - Input → (B, 1, 64, 81) (batch, canal, freq, temps)
+  - Stage 1: Conv2d(1→C1, 3×3, pad=1) → BatchNorm2d(C1) → ReLU → MaxPool2d(2×2)
+  - Stage 2: Conv2d(C1→C2, 3×3, pad=1) → BatchNorm2d(C2) → ReLU → MaxPool2d(2×2)
+  - Stage 3: Conv2d(C2→C3, 3×3, pad=1) → BatchNorm2d(C3) → ReLU → Global Average Pooling (AdaptiveAvgPool2d(1,1))
+  - Tête (Linear(C3 → num_classes=35) → logits 
 
 - **Loss function** :
   - Multi-classe : CrossEntropyLoss
-  - Multi-label : BCEWithLogitsLoss
-  - (autre, si votre tâche l’impose)
+
 
 - **Sortie du modèle** : forme = __(batch_size, num_classes)__ (ou __(batch_size, num_attributes)__)
+(batch_size, num_classes) = (64, 35) 
 
 - **Nombre total de paramètres** : `_____`
 
