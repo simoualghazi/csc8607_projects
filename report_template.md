@@ -109,17 +109,29 @@ La forme d’un batch train est (batch, C, F, T) = (64, 1, 64, 81). La cohérenc
 - **Sortie du modèle** : forme = __(batch_size, num_classes)__ (ou __(batch_size, num_attributes)__)
 (batch_size, num_classes) = (64, 35) 
 
-- **Nombre total de paramètres** : `_____`
+- **Nombre total de paramètres** : `97411`
 
+![alt text](image-1.png)
 **M1.** Décrivez l’**architecture** complète et donnez le **nombre total de paramètres**.  
 Expliquez le rôle des **2 hyperparamètres spécifiques au modèle** (ceux imposés par votre sujet).
 
+Les deux hyperparamètres spécifiques au modèle sont :
+
+- Le nombre de canaux par bloc (C1, C2, C3)  
+ contrôle la capacité du réseau (plus de canaux = plus de paramètres).
+
+- La taille de la fenêtre FFT (n_fft) du MelSpectrogram  
+ impacte la résolution temps/fréquence des entrées et donc la qualité des représentations spectrales.
+
 
 ### 2.3 Perte initiale & premier batch
+![alt text](image-2.png)
+- **Loss initiale attendue** (multi-classe) ≈ `-log(1/num_classes)` ; exemple 35 classes → ~3.56
+- **Observée sur un batch** : `3.63`
+- **Vérification** : backward OK, gradients ≠ 0  
 
-- **Loss initiale attendue** (multi-classe) ≈ `-log(1/num_classes)` ; exemple 100 classes → ~4.61
-- **Observée sur un batch** : `_____`
-- **Vérification** : backward OK, gradients ≠ 0
+Cette valeur est cohérente avec la valeur théorique attendue -log(1/35) ≈ 3.56 pour une classification multi-classe uniforme.
+Le backward est valide et les gradients sont non nuls, confirmant le bon fonctionnement du pipeline modèle–loss.
 
 **M2.** Donnez la **loss initiale** observée et dites si elle est cohérente. Indiquez la forme du batch et la forme de sortie du modèle.
 
@@ -127,14 +139,18 @@ Expliquez le rôle des **2 hyperparamètres spécifiques au modèle** (ceux impo
 
 ## 3) Overfit « petit échantillon »
 
-- **Sous-ensemble train** : `N = ____` exemples
-- **Hyperparamètres modèle utilisés** (les 2 à régler) : `_____`, `_____`
-- **Optimisation** : LR = `_____`, weight decay = `_____` (0 ou très faible recommandé)
-- **Nombre d’époques** : `_____`
+- **Sous-ensemble train** : `N = 128` exemples
+- **Hyperparamètres modèle utilisés** (les 2 à régler) : `channels_variant = small(32,64,128) (nombre de canaux par bloc CNN)`, `n_fft = 400`
+- **Optimisation** : LR = `1e-3`, weight decay = `0` (0 ou très faible recommandé)
+- **Nombre d’époques** : `30`
 
-> _Insérer capture TensorBoard : `train/loss` montrant la descente vers ~0._
+![alt text](image-3.png)
 
 **M3.** Donnez la **taille du sous-ensemble**, les **hyperparamètres** du modèle utilisés, et la **courbe train/loss** (capture). Expliquez ce qui prouve l’overfit.
+
+L’overfit est réalisé sur un très petit sous-ensemble d’entraînement de 128 exemples.
+La courbe train/loss montre une diminution rapide et monotone de la loss, passant d’environ 3.5 (valeur initiale cohérente avec une classification multi-classes à 35 classes) à une valeur proche de 0 après une trentaine d’époques.  
+Ce comportement prouve l’overfit, car le modèle est capable de mémoriser intégralement ce petit ensemble de données.
 
 ---
 
