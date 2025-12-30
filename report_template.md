@@ -156,34 +156,42 @@ Ce comportement prouve l’overfit, car le modèle est capable de mémoriser int
 
 ## 4) LR finder
 
-- **Méthode** : balayage LR (log-scale), quelques itérations, log `(lr, loss)`
-- **Fenêtre stable retenue** : `_____ → _____`
+- **Méthode** : balayage du learning rate en échelle logarithmique sur 100 itérations, en enregistrant la loss pour chaque valeur de LR.
+- **Fenêtre stable retenue** : `1e-3 → 1e-2`
 - **Choix pour la suite** :
-  - **LR** = `_____`
-  - **Weight decay** = `_____` (valeurs classiques : 1e-5, 1e-4)
+  - **LR** = `1e-3`
+  - **Weight decay** = `1e-4` (valeurs classiques : 1e-5, 1e-4)
 
-> _Insérer capture TensorBoard : courbe LR → loss._
+![alt text](image-4.png)
+![alt text](image-5.png)
 
-**M4.** Justifiez en 2–3 phrases le choix du **LR** et du **weight decay**.
+**M4.** Justifiez en 2–3 phrases le choix du **LR** et du **weight decay**.  
+Le LR choisi correspond à la zone où la loss diminue de manière stable avant de devenir instable lorsque le LR augmente trop. Des valeurs supérieures provoquent des oscillations et une divergence de la perte. Le weight decay est fixé à 1e-4 afin d’introduire une régularisation légère sans empêcher l’apprentissage.
 
 ---
 
 ## 5) Mini grid search (rapide)
+commande: python -m src.grid_search --config configs/config.yaml --epochs 3
+![alt text](image-6.png)
+![alt text](image-7.png)
+
 
 - **Grilles** :
-  - LR : `{_____ , _____ , _____}`
+  - LR : `{5e-4 , 1e-3 , 2e-3}`
   - Weight decay : `{1e-5, 1e-4}`
-  - Hyperparamètre modèle A : `{_____, _____}`
-  - Hyperparamètre modèle B : `{_____, _____}`
+  - Hyperparamètre modèle A : `{small, large}`((32,64,128):small, (48,96,192):large)
+  - Hyperparamètre modèle B : `{400, 512, 640}`
 
-- **Durée des runs** : `_____` époques par run (1–5 selon dataset), même seed
+- **Durée des runs** : `3` époques par run (1–5 selon dataset), même seed
 
-| Run (nom explicite) | LR    | WD     | Hyp-A | Hyp-B | Val metric (nom=_____) | Val loss | Notes |
+| Run (nom explicite) | LR    | WD     | Hyp-A | Hyp-B | Val metric (nom=accuracy) | Val loss | Notes |
 |---------------------|-------|--------|-------|-------|-------------------------|----------|-------|
 |                     |       |        |       |       |                         |          |       |
 |                     |       |        |       |       |                         |          |       |
 
 > _Insérer capture TensorBoard (onglet HParams/Scalars) ou tableau récapitulatif._
+
+
 
 **M5.** Présentez la **meilleure combinaison** (selon validation) et commentez l’effet des **2 hyperparamètres de modèle** sur les courbes (stabilité, vitesse, overfit).
 
