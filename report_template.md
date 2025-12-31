@@ -172,9 +172,7 @@ Le LR choisi correspond à la zone où la loss diminue de manière stable avant 
 
 ## 5) Mini grid search (rapide)
 commande: python -m src.grid_search --config configs/config.yaml --epochs 3
-![alt text](image-6.png)
-![alt text](image-7.png)
-
+![alt text](image-8.png)
 
 - **Grilles** :
   - LR : `{5e-4 , 1e-3 , 2e-3}`
@@ -186,15 +184,27 @@ commande: python -m src.grid_search --config configs/config.yaml --epochs 3
 
 | Run (nom explicite) | LR    | WD     | Hyp-A | Hyp-B | Val metric (nom=accuracy) | Val loss | Notes |
 |---------------------|-------|--------|-------|-------|-------------------------|----------|-------|
-|                     |       |        |       |       |                         |          |       |
+|grid_34_lr=0.002_wd=0 0001_v=large_nfft=400|  0.002|   1e-4| large|   400    |       0.7768                  |    0.7952      |   meilleur run    |
 |                     |       |        |       |       |                         |          |       |
 
 > _Insérer capture TensorBoard (onglet HParams/Scalars) ou tableau récapitulatif._
 
-
+![alt text](image-9.png)
+![alt text](image-10.png)
+![alt text](image-11.png)
 
 **M5.** Présentez la **meilleure combinaison** (selon validation) et commentez l’effet des **2 hyperparamètres de modèle** sur les courbes (stabilité, vitesse, overfit).
 
+La meilleure combinaison sur validation après 3 époques est :
+LR = 0.002, weight decay = 1e-4, channels_variant = large, n_fft = 400 (val_accuracy ≈ 0.7768, val_loss ≈ 0.7952).
+
+On observe que channels_variant = large améliore la performance par rapport à small, ce qui est cohérent avec une capacité plus grande (plus de canaux → modèle plus expressif). En contrepartie, cela peut augmenter le risque d’overfit sur un entraînement long, d’où l’intérêt d’un weight decay non nul.
+
+Le paramètre n_fft contrôle la résolution temps/fréquence du spectrogramme :
+
+* un n_fft plus petit (400) donne une meilleure résolution temporelle, ce qui semble avantageux ici pour des mots courts (~1 seconde),
+
+* des valeurs plus grandes (512/640) restent compétitives mais légèrement en dessous dans cette grille courte.
 ---
 
 ## 6) Entraînement complet (10–20 époques, sans scheduler)
