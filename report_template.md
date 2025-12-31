@@ -208,6 +208,13 @@ Le paramètre n_fft contrôle la résolution temps/fréquence du spectrogramme :
 ---
 
 ## 6) Entraînement complet (10–20 époques, sans scheduler)
+python -m src.train --config configs/config.yaml
+
+![alt text](image-12.png)
+![alt text](image-13.png)
+
+![alt text](image-14.png)
+![alt text](image-15.png)
 
 - **Configuration finale** :
   - LR = `_____`
