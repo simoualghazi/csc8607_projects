@@ -8,6 +8,13 @@ dataset:
 
 train:
   batch_size: 64
+  epochs: 15
+  optimizer:
+    name: adam
+    lr: 0.002
+    weight_decay: 0.0001
+  scheduler:
+    name: none
 
 preprocess:
   target_sample_rate: 16000
@@ -26,38 +33,11 @@ augment:
 model:
   type: cnn2d
   num_classes: 35
-  channels_variant: small   # small ou large
-  dropout: 0.0
-
-train:
-  seed: 42
-  device: auto              # "cpu", "cuda", ou "auto"
-  batch_size: 64
-  epochs: 10
-  max_steps: null           # entier ou null
-  overfit_small: false      # true pour sur-apprendre sur un petit échantillon
-
-  optimizer:
-    name: adam              # sgd/adam/rmsprop
-    lr: 0.001
-    weight_decay: 0.0
-    momentum: 0.9           # utile si SGD
-
-  scheduler:
-    name: none              # none/step/cosine/onecycle
-    step_size: 10
-    gamma: 0.1
-    warmup_steps: 0
+  channels_variant: large   # small ou large
 
 metrics:
   classification:           # ex: ["accuracy", "f1"]
     - accuracy
-  regression: []            # ex: ["mae", "rmse"]
-
-hparams:                    # espace pour mini grid search
-  lr: [0.0005, 0.001, 0.005]
-  batch_size: [32, 64]
-  weight_decay: [0.0, 0.0005]
 
 paths:
   runs_dir: "./runs"
