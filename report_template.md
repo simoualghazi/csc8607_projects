@@ -217,19 +217,19 @@ python -m src.train --config configs/config.yaml
 ![alt text](image-15.png)
 
 - **Configuration finale** :
-  - LR = `_____`
-  - Weight decay = `_____`
-  - Hyperparamètre modèle A = `_____`
-  - Hyperparamètre modèle B = `_____`
-  - Batch size = `_____`
-  - Époques = `_____` (10–20)
+  - LR = `0.002`
+  - Weight decay = `1e-4`
+  - Hyperparamètre modèle A = `channels_variant = large`
+  - Hyperparamètre modèle B = `n_fft = 400`
+  - Batch size = `64`
+  - Époques = `15` (10–20)
 - **Checkpoint** : `artifacts/best.ckpt` (selon meilleure métrique val)
+* Meilleur epoch : 14
+* Best val_accuracy = 0.8962
 
-> _Insérer captures TensorBoard :_
-> - `train/loss`, `val/loss`
-> - `val/accuracy` **ou** `val/f1` (classification)
-
-**M6.** Montrez les **courbes train/val** (loss + métrique). Interprétez : sous-apprentissage / sur-apprentissage / stabilité d’entraînement.
+**M6.** Montrez les **courbes train/val** (loss + métrique). Interprétez : sous-apprentissage / sur-apprentissage / stabilité d’entraînement.  
+Les courbes train/loss et val/loss montrent une diminution nette au début puis un plateau progressif, tandis que val/accuracy augmente rapidement jusqu’à environ 0.90. L’entraînement est globalement stable : pas de divergence, et les fluctuations de val/loss restent modérées.
+Le meilleur modèle est obtenu à l’epoch 14 (val_accuracy ≈ 0.896). On n’observe pas de sur-apprentissage marqué, car la performance validation reste élevée et la loss validation ne remonte pas durablement.
 
 ---
 
