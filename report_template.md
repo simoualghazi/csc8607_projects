@@ -171,7 +171,7 @@ Le LR choisi correspond à la zone où la loss diminue de manière stable avant 
 ---
 
 ## 5) Mini grid search (rapide)
-commande: python -m src.grid_search --config configs/config.yaml --epochs 3
+
 ![alt text](image-8.png)
 
 - **Grilles** :
@@ -208,7 +208,7 @@ Le paramètre n_fft contrôle la résolution temps/fréquence du spectrogramme :
 ---
 
 ## 6) Entraînement complet (10–20 époques, sans scheduler)
-python -m src.train --config configs/config.yaml
+
 
 ![alt text](image-12.png)
 ![alt text](image-13.png)
@@ -234,14 +234,14 @@ Le meilleur modèle est obtenu à l’epoch 14 (val_accuracy ≈ 0.896). On n’
 ---
 
 ## 7) Comparaisons de courbes (analyse)
+![alt text](image-16.png)
+![alt text](image-17.png)
+![alt text](image-18.png)
 
-> _Superposez plusieurs runs dans TensorBoard et insérez 2–3 captures :_
 
-- **Variation du LR** (impact au début d’entraînement)
-- **Variation du weight decay** (écart train/val, régularisation)
-- **Variation des 2 hyperparamètres de modèle** (convergence, plateau, surcapacité)
-
-**M7.** Trois **comparaisons** commentées (une phrase chacune) : LR, weight decay, hyperparamètres modèle — ce que vous attendiez vs. ce que vous observez.
+- **Variation du LR** (impact au début d’entraînement)Un LR plus élevé (0.002) accélère fortement la convergence et améliore l’accuracy de validation, conformément aux attentes issues du LR finder.
+- **Variation du weight decay** (écart train/val, régularisation) Une régularisation plus forte (1e-4) réduit l’écart train/val et améliore la stabilité, limitant le sur-apprentissage.
+- **Variation des 2 hyperparamètres de modèle** Les modèles large avec n_fft = 400 convergent plus vite et atteignent de meilleures performances, confirmant que plus de capacité et une meilleure résolution temporelle sont bénéfiques pour cette tâche.
 
 ---
 
@@ -281,7 +281,12 @@ Le meilleur modèle est obtenu à l’epoch 14 (val_accuracy ≈ 0.896). On n’
 
 ```bash
 # Exemple (remplacer par vos commandes effectives)
-python -m src.train --config configs/config.yaml --max_epochs 15
+ python -m src.nbreparam
+python -m src.loss_init
+python -m src.overfit --config configs/config.yaml --n 128 --epochs 30 --lr 1e-3 --wd 0.0
+python -m src.lr_finder --config configs/config.yaml --min_lr 1e-6 --max_lr 1 --num_iters 100
+python -m src.grid_search --config configs/config.yaml --epochs 3
+python -m src.train --config configs/config.yaml
 python -m src.evaluate --config configs/config.yaml --checkpoint artifacts/best.ckpt
 ````
 
