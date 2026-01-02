@@ -33,8 +33,8 @@ def main():
 
     # -------- model --------
     model = build_model(config).to(device)
-    state = torch.load(args.checkpoint, map_location=device)
-    model.load_state_dict(state)
+    ckpt = torch.load(args.checkpoint, map_location=device)
+    model.load_state_dict(ckpt["model_state_dict"])
     model.eval()
 
     criterion = nn.CrossEntropyLoss()

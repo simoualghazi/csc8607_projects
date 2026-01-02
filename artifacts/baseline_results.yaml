@@ -1,0 +1,17 @@
+majority_class:
+  count: 3250
+  index: 34
+  name: zero
+  proportion: 0.03830604764093679
+num_classes: 35
+test:
+  majority_class: 0.03797238372093023
+  random_uniform: 0.0272663100514301
+  random_weighted: 0.03044134815938251
+theoretical:
+  random_uniform: 0.02857142857142857
+  random_weighted: 0.03159656375646591
+validation:
+  majority_class: 0.038461538461538464
+  random_uniform: 0.031164617492602423
+  random_weighted: 0.03265224358974359
