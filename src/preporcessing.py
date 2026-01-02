@@ -34,10 +34,6 @@ def get_preprocess_transforms(config: dict) -> Optional[Callable]:
 
     n_mels = int(pp.get("n_mels", 64))
 
-    # Normalisation simple (optionnelle)
-    # ex yaml:
-    # preprocess:
-    #   spec_normalize: "standard"  # "standard" | "none"
     spec_norm = str(pp.get("spec_normalize", "standard")).lower()
 
     mel = torchaudio.transforms.MelSpectrogram(
@@ -71,7 +67,7 @@ def get_preprocess_transforms(config: dict) -> Optional[Callable]:
         spec = mel(x)
         spec = to_db(spec)
 
-        # 4) Normalisation (sur le spectrogramme)
+        # 4) Normalisation 
         if spec_norm == "standard":
             mean = spec.mean()
             std = spec.std().clamp_min(1e-8)
