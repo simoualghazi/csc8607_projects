@@ -31,7 +31,7 @@
 - **Dimensions d’entrée attendues** (`meta["input_shape"]`) :  [1, 64, 81]
 - **Nombre de classes** (`meta["num_classes"]`) :35 classes
 
-**D1.** Quel dataset utilisez-vous ? D’où provient-il et quel est son format (dimensions, type d’entrée) ?
+
 
 ### 1.2 Splits et statistiques
 
@@ -287,7 +287,7 @@ python -m src.overfit --config configs/config.yaml --n 128 --epochs 30 --lr 1e-3
 python -m src.lr_finder --config configs/config.yaml --min_lr 1e-6 --max_lr 1 --num_iters 100
 python -m src.grid_search --config configs/config.yaml --epochs 3
 python -m src.train --config configs/config.yaml
-python -m src.evaluate --config configs/config.yaml --checkpoint artifacts/best.ckpt
+
 ````
 
 * **Artifacts requis présents** :
