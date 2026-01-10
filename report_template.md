@@ -345,7 +345,7 @@ model:
 - **Commandes exactes** :
 
 ```bash
-# Exemple (remplacer par vos commandes effectives)
+# Exemple 
 python -m src.nbreparam
 python -m src.loss_init
 python -m src.overfit --config configs/config.yaml --n 128 --epochs 30 --lr 1e-3 --wd 0.0

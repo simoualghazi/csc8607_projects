@@ -24,7 +24,7 @@ def get_preprocess_transforms(config: dict) -> Optional[Callable]:
     target_num_samples = pp.get("target_num_samples", 16000)
     target_num_samples = int(target_num_samples) if target_num_samples is not None else 16000
 
-    # Hyperparamètre à régler (exigé par l'énoncé)
+    # Hyperparamètre à régler 
     # Choix suggérés: 400 / 512 / 640
     n_fft = int(pp.get("n_fft", 400))
     win_length = pp.get("win_length", None)

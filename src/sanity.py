@@ -36,7 +36,7 @@ def main():
     os.makedirs("artifacts/figures", exist_ok=True)
 
     # --------------------
-    # D11: shape batch + cohérence meta
+    # D11:
     # --------------------
     x_batch, y_batch = next(iter(train_loader))
 
@@ -52,8 +52,7 @@ def main():
     print("CONSISTENT meta vs batch:", is_consistent)
 
     # --------------------
-    # D10: 2–3 exemples après preprocessing/augmentation
-    # On prend directement des éléments du dataset train (inclut augmentations)
+    # D10: 2–3 exemples
     # --------------------
     print("\n=== D10: Saving 3 examples (train dataset, after preprocess/augment) ===")
     for i in range(3):

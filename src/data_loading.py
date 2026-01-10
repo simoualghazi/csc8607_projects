@@ -18,8 +18,7 @@ import torch
 from torch.utils.data import DataLoader, Dataset
 import torchaudio
 
-# Ces fonctions existent dans ton projet (d'après tes extraits).
-# Il y a une typo possible "preporcessing". On gère les deux.
+
 try:
     from .preprocessing import get_preprocess_transforms
 except Exception:
@@ -77,7 +76,7 @@ class SpeechCommandsWrapper(Dataset):
 
         x = waveform
         if self.preprocess is not None:
-            # On accepte (x, sample_rate=...) au cas où ton preprocess fait du resample.
+            
             try:
                 x = self.preprocess(x, sample_rate=sample_rate)
             except TypeError:
@@ -148,7 +147,7 @@ def get_dataloaders(config: dict):
 
     ds_name = ds_cfg.get("name", "SPEECHCOMMANDS")
     if str(ds_name).upper() not in {"SPEECHCOMMANDS", "SPEECH_COMMANDS", "SPEECH-COMMANDS"}:
-        # Tu peux enlever ce check si ton projet gère d'autres datasets.
+        
         raise ValueError(
             f"dataset.name='{ds_name}' non supporté par cette implémentation. "
             "Mets 'SPEECHCOMMANDS' dans le yaml."
@@ -161,9 +160,7 @@ def get_dataloaders(config: dict):
 
     batch_size = int(train_cfg.get("batch_size", 64))
 
-    # Optionnel : taille fixe pour input_shape stable.
-    # Ton YAML n'a pas ce champ, donc on propose une valeur raisonnable si tu veux.
-    # Tu peux ajouter: preprocess: { target_num_samples: 16000 }
+
     target_num_samples = preprocess_cfg.get("target_num_samples", None)
     if target_num_samples is not None:
         target_num_samples = int(target_num_samples)
