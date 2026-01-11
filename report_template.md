@@ -105,9 +105,9 @@ Les opérations de Time Masking et Frequency Masking n’altèrent pas le mot pr
 ![alt text](captures/image-101.png)
 - **Exemples** après preprocessing/augmentation (insérer 2–3 images/spectrogrammes) :
 
-![alt text](artifacts\figures\sanity_example_0_label_backward.png)
-![alt text](artifacts\figures\sanity_example_1_label_backward.png)
-![alt text](artifacts\figures\sanity_example_2_label_backward.png)
+![alt text](artifacts/figures/sanity_example_0_label_backward.png)
+![alt text](artifacts/figures/sanity_example_1_label_backward.png)
+![alt text](artifacts/figures/sanity_example_2_label_backward.png)
 
 
 
