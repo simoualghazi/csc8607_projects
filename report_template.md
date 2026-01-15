@@ -12,7 +12,7 @@
 
 - **Étudiant·e** : _OUALGHAZI, Mohamed_
 - **Projet** : _Speech Commands v0.02 (reconnaissance de mots courts) avec CNN sur spectrogrammes log-mel_
-- **Dépôt Git** : _URL publique_
+- **Dépôt Git** : https://github.com/simoualghazi/csc8607_projects
 - **Environnement** : `python == 3.10.18`, `torch == 2.5.1`, `cuda == 12.1`  
 - **Commandes utilisées** :
   - Entraînement : `python -m src.train --config configs/config.yaml`
